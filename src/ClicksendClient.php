@@ -9,6 +9,9 @@ use NotificationChannels\Clicksend\Exceptions\CouldNotSendNotification;
 class ClicksendClient
 {
     protected $client;
+
+    protected $access_user;
+
     protected $access_key;
 
     /**
@@ -16,9 +19,10 @@ class ClicksendClient
      * @param Client $client
      * @param $access_key string API Key from Clicksend API
      */
-    public function __construct(Client $client, $access_key)
+    public function __construct(Client $client, $access_user, $access_key)
     {
         $this->client = $client;
+        $this->access_user = $access_user;
         $this->access_key = $access_key;
     }
 
@@ -37,12 +41,14 @@ class ClicksendClient
         }
 
         try {
-            $this->client->request('POST', 'https://rest.messagebird.com/messages', [
-                'body' => $message->toJson(),
-                'headers' => [
-                    'Authorization' => 'AccessKey '.$this->access_key,
-                ],
-            ]);
+            dd($message->toJson());
+            // $this->client->request('POST', 'https://rest.clicksend.com/v3/', [
+            //     'body' => $message->toJson(),
+            //     'headers' => [
+            //         'Content-type' => 'application/json',
+            //         'Authorization' => "Basic " . base64_encode("{$this->access_user}:{$this->access_key}"),
+            //     ],
+            // ]);
         } catch (Exception $exception) {
             throw CouldNotSendNotification::serviceRespondedWithAnError($exception);
         }

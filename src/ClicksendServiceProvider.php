@@ -22,7 +22,7 @@ class ClicksendServiceProvider extends ServiceProvider
                     throw InvalidConfiguration::configurationNotSet();
                 }
 
-                return new ClicksendClient(new Client(), $config['access_key']);
+                return new ClicksendClient(new Client(), $config['access_user'], $config['access_key']);
             });
     }
 }
