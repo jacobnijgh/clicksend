@@ -33,22 +33,21 @@ class ClicksendClient
      */
     public function send(ClicksendMessage $message)
     {
-        if (empty($message->originator)) {
-            $message->setOriginator(config('services.clicksend.originator'));
+        if (empty($message->from)) {
+            $message->setFrom(config('services.clicksend.from'));
         }
-        if (empty($message->recipients)) {
-            $message->setRecipients(config('services.clicksend.recipients'));
+        if (empty($message->to)) {
+            $message->setRecipient(config('services.clicksend.recipient'));
         }
 
         try {
-            dd($message->toJson());
-            // $this->client->request('POST', 'https://rest.clicksend.com/v3/', [
-            //     'body' => $message->toJson(),
-            //     'headers' => [
-            //         'Content-type' => 'application/json',
-            //         'Authorization' => "Basic " . base64_encode("{$this->access_user}:{$this->access_key}"),
-            //     ],
-            // ]);
+            return $this->client->request('POST', 'https://rest.clicksend.com/v3/sms/send', [
+                'body' => $message->toJson(),
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Authorization' => "Basic " . base64_encode("{$this->access_user}:{$this->access_key}"),
+                ],
+            ]);
         } catch (Exception $exception) {
             throw CouldNotSendNotification::serviceRespondedWithAnError($exception);
         }

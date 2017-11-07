@@ -4,9 +4,11 @@ namespace NotificationChannels\Clicksend;
 
 class ClicksendMessage
 {
-    public $body;
-    public $originator;
-    public $recipients;
+		public $body;
+		
+		public $from;
+		
+		public $to;
 
     public static function create($body = '')
     {
@@ -27,26 +29,24 @@ class ClicksendMessage
         return $this;
     }
 
-    public function setOriginator($originator)
+    public function setFrom($from)
     {
-        $this->originator = $originator;
+        $this->from = $from;
 
         return $this;
     }
 
-    public function setRecipients($recipients)
+    public function setRecipient($recipient)
     {
-        if (is_array($recipients)) {
-            $recipients = implode(',', $recipients);
-        }
-
-        $this->recipients = $recipients;
+        $this->to = $recipient;
 
         return $this;
     }
 
     public function toJson()
     {
-        return json_encode($this);
+        return json_encode([
+					'messages' => [$this]
+				]);
     }
 }

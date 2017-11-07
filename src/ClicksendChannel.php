@@ -31,9 +31,13 @@ class ClicksendChannel
         }
 
         if ($to = $notifiable->routeNotificationFor('clicksend')) {
-            $message->setRecipients($to);
+            $message->setRecipient($to);
         }
 
-        $this->client->send($message);
+				$response = $this->client->send($message);
+				
+        if (method_exists($notification, $method = 'response')) {
+					$notification->{$method}(json_decode($response->getBody(), true));
+				}
     }
 }
